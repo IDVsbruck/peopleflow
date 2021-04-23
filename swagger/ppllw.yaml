@@ -1,0 +1,206 @@
+openapi: 3.0.3
+info:
+  title: Pplflw API
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080
+    description: DEV environment
+paths:
+  /authorization/signup:
+    post:
+      tags:
+        - Authorization
+      operationId: signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredentialsModel'
+      responses:
+        '204':
+          description: success response
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+  /authorization/confirm:
+    get:
+      tags:
+        - Authorization
+      operationId: authorization_confirm
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: success response
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+  /authorization/token:
+    post:
+      tags:
+        - Authorization
+      operationId: get_token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CredentialsModel'
+      responses:
+        '200':
+          description: success response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  required:
+                    - payload
+                  properties:
+                    success:
+                      enum:
+                        - true
+                    payload:
+                      $ref: '#/components/schemas/Token'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+  /employee:
+    post:
+      tags:
+        - Employee
+      operationId: create_employee
+      responses:
+        '200':
+          description: create employee
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Employee'
+        '400':
+          $ref: '#/components/responses/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - bearerAuth:
+          - 'api:employee'
+components:
+  responses:
+    ErrorResponse:
+      description: error response
+      content:
+        application/json:
+          schema:
+              type: string
+  schemas:
+    Token:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - expires_in
+        - token_type
+        - scope
+        - aud
+        - sub
+        - iat
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          enum:
+            - bearer
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+        scope:
+          type: string
+        aud:
+          type: array
+          items:
+            type: string
+        sub:
+          type: string
+        pln:
+          type: string
+        azp:
+          type: string
+        iss:
+          type: string
+        iat:
+          type: integer
+        jti:
+          type: string
+    Employee:
+      type: object
+      required:
+        - email
+        - name
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        age:
+          type: integer
+        active:
+          type: boolean
+    CredentialsModel:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    oauth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: 'http://localhost:8090/oauth/authorize'
+          tokenUrl: 'http://localhost:8090/oauth/token'
+          scopes:
+            'api:customer': Common access to Pplflw API methods
+tags:
+  - name: Authorization
+    description: Endpoints for Authorization control
+  - name: Employee
+    description: Endpoints for Employee control

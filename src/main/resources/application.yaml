@@ -1,0 +1,54 @@
+server:
+    port: 8080
+    servlet:
+        context-path: /
+
+spring:
+    datasource:
+        name: pplflw
+        url: jdbc:mysql://localhost:3306/pplflw
+        username: root
+        password: root
+        driver.class: com.mysql.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: none
+        show-sql: true
+        database-platform: org.hibernate.dialect.MySQL5Dialect
+        properties:
+            hibernate:
+                format_sql: true
+                jdbc:
+                    lob.non_contextual_creation: true
+        open-in-view: false
+    liquibase:
+        change-log: classpath:liquibase-changelog.xml
+        enabled: true
+
+security.oauth2:
+    client:
+        clientId: com.idvsbruck.pplflw.api
+        clientSecret: client-secret
+        accessTokenUri: http://localhost:8090/oauth/token
+        userAuthorizationUri: http://localhost:8090/oauth/authorize
+        jwtKeyUri: http://localhost:8090/openid/rsa
+        authorization-api-uri: http://localhost:8090/oauth/auth
+        scopes: api:employee api:manager
+        create-employee-uri: ${security.oauth2.client.authorization-api-uri}/create
+        confirm-employee-uri: ${security.oauth2.client.authorization-api-uri}/confirm
+    resource:
+        userInfoUri: http://localhost:9999
+        filter-order: 3
+
+http.client:
+    connectTimeout: 20000
+    connectionRequestTimeout: 20000
+    readTimeout: 30000
+
+logging:
+    pattern:
+        console: "%d{yy-MM-dd HH:mm:ss.SSS} %clr(%-5level){yellow} [%-9.9t] %clr(%-48.48logger{39}){cyan} : %msg%n"
+    level:
+        liquibase.executor: WARN
+        org.springframework: INFO
+        com.idvsbruck.pplflw: DEBUG

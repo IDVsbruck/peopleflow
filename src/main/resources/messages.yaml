@@ -1,0 +1,15 @@
+email:
+    invalid: The value '${validatedValue}' of 'email' field does not match the required pattern
+    blank: The 'email' field cannot be blank
+    oversize: The length of the value of 'email' field is limited to {max} symbols
+code:
+    blank: The 'code' field cannot be blank
+    oversize: The length of the value of 'code' field is limited to {max} symbols
+password:
+    blank: The 'password' field cannot be blank
+    oversize: The length of the value of 'password' field is limited to {max} symbols
+name:
+    blank: The 'name' field cannot be blank
+    oversize: The length of the value of 'name' field is limited to {max} symbols
+state:
+    absent: The state of employee cannot be absent
