@@ -78,6 +78,7 @@ A high-level architecture diagram is sufficient to present this.
 - mock virtual OAuth2 Authorization Server (used previously created configuration classes)
 - creation OpenAPI Specification Documentation (aka Swagger)
 
+
 - tests are fully workable and successful:
 
-![Test screenshot](https://prnt.sc/11w70jw)
+![Test screenshot](https://user-images.githubusercontent.com/1489287/115862827-46a34e80-a43d-11eb-8139-0d884dbfb531.png)
